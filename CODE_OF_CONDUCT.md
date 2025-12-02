@@ -75,9 +75,9 @@ This Code of Conduct is adapted from the [Contributor Covenant](https://www.cont
 Community Impact Guidelines were inspired by [Mozilla's code of conduct enforcement ladder](https://github.com/mozilla/diversity).
 
 For answers to common questions about this code of conduct, see the FAQ at https://www.contributor-covenant.org/faq. Translations are available at https://www.contributor-covenant.org/translations.
-# 🌟 Code of Conduct – EduHaven
+# 🌟 Code of Conduct 
 
-Welcome to EduHaven – a community of learners, builders, and collaborators. To ensure an inclusive, respectful, and productive environment for everyone, we have established the following Code of Conduct.
+Welcome to a community of learners, builders, and collaborators. To ensure an inclusive, respectful, and productive environment for everyone, we have established the following Code of Conduct.
 
 ## 💬 Our Pledge
 
@@ -123,7 +123,6 @@ Project maintainers are responsible for clarifying the standards of acceptable b
 
 If you are experiencing or witness any unacceptable behavior, or have other concerns, please reach out privately to the maintainers via:
 
-🗨️ **Discord:** [Join and message moderators](https://discord.gg/uZv6ShY345)
 
 All complaints will be reviewed and investigated promptly and fairly.
 
