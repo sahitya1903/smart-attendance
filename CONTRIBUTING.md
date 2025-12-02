@@ -48,9 +48,9 @@ The frontend will be available at `http://localhost:5173`
 
 ```bash
 cd backend
-pip install -r requirements.txt  # If requirements.txt exists
+pip install -r requirements.txt
 # Or install dependencies manually:
-pip install fastapi uvicorn pillow
+# pip install fastapi uvicorn pillow pydantic
 python main.py
 ```
 
