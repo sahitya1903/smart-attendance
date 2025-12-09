@@ -3,3 +3,12 @@ backend/.venv
 backend/__pycache__
 backend/*.pyc
 backend/.env
+.env
+__init__.cpython-313
+auth.cpython-313
+main.cpython-313
+config.cpython-313
+security.cpython-313
+email.cpython-313
+mongo.cpython-313
+auth.cpython-313
