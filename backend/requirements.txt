@@ -15,4 +15,6 @@ bcrypt
 passlib[bcrypt]
 motor
 python-jose
+pydantic-settings==2.10.1
+
 
