@@ -17,13 +17,13 @@ def _flatten(prefix: str, d: Dict[str, Any], out: Dict[str, Any]) -> None:
 
 async def get_by_user(user_id: str) -> Optional[Dict[str, Any]]:
     """Return the raw document or None"""
-    return await db[COL].find_one({"userId": user_id})
+    return await db[COL].find_one({"user_id": user_id})
 
 async def create_default(user_id: str, profile: dict):
     now = datetime.utcnow()
 
     default = {
-        "userId": user_id,
+        "user_id": user_id,
         "profile": {
             "name": profile.get("name", ""),
             "email": profile.get("email", ""),
@@ -64,7 +64,7 @@ async def upsert(user_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
 
     # NOTE: we pass filter and update as positional args: (filter, update, ...)
     res = await db[COL].find_one_and_update(
-        {"userId": user_id},
+        {"user_id": user_id},
         {"$set": payload},                 # <-- required second positional arg 'update'
         upsert=True,
         return_document=ReturnDocument.AFTER
@@ -91,7 +91,7 @@ async def patch(user_id: str, patch_payload: Dict[str, Any]) -> Dict[str, Any]:
 
     # MUST pass 'update' as second positional argument
     res = await db[COL].find_one_and_update(
-        {"userId": user_id},
+        {"user_id": user_id},
         {"$set": set_map},                 # <-- this is the 'update' arg
         upsert=True,
         return_document=ReturnDocument.AFTER
@@ -99,5 +99,5 @@ async def patch(user_id: str, patch_payload: Dict[str, Any]) -> Dict[str, Any]:
     return res
 
 async def create_index_once():
-    """Ensure userId is unique/indexed at startup."""
-    await db[COL].create_index("userId", unique=True)
+    """Ensure user_id is unique/indexed at startup."""
+    await db[COL].create_index("user_id", unique=True)

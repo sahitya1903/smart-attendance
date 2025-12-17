@@ -1,19 +1,15 @@
 import os
 import jwt
 from datetime import datetime, timedelta
-from typing import Optional
 
-# Load secret & settings from env (set these in your .env)
 JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
-# print(JWT_SECRET, JWT_ALGORITHM)
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 
 def create_jwt(user_id: str, role: str, email: str = None):
-    print(JWT_SECRET)
     payload = {
-        "sub": user_id,
+        "user_id": user_id,          # ✅ FIXED
         "role": role,
-        "email": email,           # ← ADD EMAIL TO PAYLOAD
+        "email": email,
         "iat": datetime.utcnow(),
         "exp": datetime.utcnow() + timedelta(days=30),
     }
@@ -21,5 +17,4 @@ def create_jwt(user_id: str, role: str, email: str = None):
 
 
 def decode_jwt(token: str) -> dict:
-    payload = jwt.decode(token, JWT_SECRET, algorithms=JWT_ALGORITHM)
-    return payload
+    return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])

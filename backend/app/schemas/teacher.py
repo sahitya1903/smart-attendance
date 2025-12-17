@@ -11,7 +11,7 @@ class Profile(BaseModel):
     avatarUrl: Optional[str] = None
     
 class UserSettingsCreate(BaseModel):
-    userId: str
+    user_id: str
     profile: Optional[Profile] = Profile()
     theme: Optional[constr(regex="^(Light|Dark|Forest|Cyber)$")] = "Light"
     notifications: Optional[Notifications] = Notifications()

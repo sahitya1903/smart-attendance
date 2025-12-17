@@ -31,7 +31,7 @@ class Profile(BaseModel):
     avatarUrl: Optional[str] = None
 
 class UserSettingsCreate(BaseModel):
-    # used when creating defaults (server generates userId)
+    # used when creating defaults (server generates user_id)
     profile: Optional[Profile] = Profile()
     theme: Optional[Literal["Light", "Dark", "Forest", "Cyber"]] = "Light"
     notifications: Optional[Notifications] = Notifications()
@@ -40,6 +40,6 @@ class UserSettingsCreate(BaseModel):
     faceSettings: Optional[FaceSettings] = FaceSettings()
 
 class UserSettingsResponse(UserSettingsCreate):
-    userId: str
+    user_id: str
     createdAt: Optional[datetime]
     updatedAt: Optional[datetime]

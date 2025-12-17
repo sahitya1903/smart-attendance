@@ -72,6 +72,10 @@ async def register(payload: RegisterRequest, background_tasks: BackgroundTasks):
             }
             await db.students.insert_one(student_doc)
         elif payload.role == "teacher":
+            if not payload.employee_id:
+                raise HTTPException(status_code=400, detail="Employee ID required")
+            if not payload.phone:
+                raise HTTPException(status_code=400, detail="Phone number required")
             teacher_doc = {
                 "user_id": created_user_id,
                 "employee_id": payload.employee_id,
@@ -82,14 +86,12 @@ async def register(payload: RegisterRequest, background_tasks: BackgroundTasks):
             await db.teachers.insert_one(teacher_doc)
             
     except Exception as e:
-    # rollback: delete the created user to keep DB consistent
-        try:
-            await db.users.delete_one({"_id": created_user_id})
-        except Exception:
-            # if rollback deletion fails, log and raise generic error
-            # (you may want to integrate real logging here)
-            pass
-        raise HTTPException(status_code=500, detail="Failed to create role-specific record") from e
+        await db.users.delete_one({"_id": created_user_id})
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to create role-specific record: {str(e)}"
+        )
+
     
     # Build Verification link
     verify_link = f"{BACKEND_BASE_URL}/auth/verify-email?token={verification_token}"
@@ -109,7 +111,7 @@ async def register(payload: RegisterRequest, background_tasks: BackgroundTasks):
 
     
     return {
-        "userId": str(result.inserted_id),
+        "user_id": str(result.inserted_id),
         "email": payload.email,
         "role": payload.role,
         "name": payload.name,
@@ -147,7 +149,7 @@ async def login(payload: LoginRequest):
     print(token)
 
     return {
-        "userId": str(user["_id"]),
+        "user_id": str(user["_id"]),
         "email": email,
         "role": user["role"],
         "name": user["name"],
@@ -233,7 +235,7 @@ async def google_callback(request: Request):
     redirect_url = (
         f"{FRONTEND_BASE_URL}/oauth-callback"
         f"#token={quote(jwt_token)}"
-        f"&userId={quote(str(user['_id']))}"
+        f"&user_id={quote(str(user['_id']))}"
         f"&email={quote(user['email'])}"
         f"&role={quote(user['role'])}"
         f"&name={quote(user['name'])}"

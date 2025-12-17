@@ -8,7 +8,7 @@ class LoginRequest(BaseModel):
 
 
 class UserResponse(BaseModel):
-    userId: str
+    user_id: str
     email: str
     role: str
     name: str

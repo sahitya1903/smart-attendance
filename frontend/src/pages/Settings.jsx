@@ -131,7 +131,6 @@ export default function Settings() {
       const payload = {
         profile: {
           name: profile.name,
-          email: profile.email,
           phone: profile.phone,
           role: profile.role,
           subjects: profile.subjects,
@@ -403,7 +402,7 @@ export default function Settings() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Email Address</label>
-                    <input type="email" value={profile.email} onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-700" />
+                    <input type="email" value={profile.email} disabled className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-100 text-slate-500 cursor-not-allowed" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Phone Number</label>

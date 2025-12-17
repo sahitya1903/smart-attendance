@@ -29,7 +29,7 @@ export default function Register() {
     email: "",
     password: "",
     branch: "",
-    employeeId: "",
+    employee_id: "",
     phone: "",
   });
 
@@ -55,7 +55,7 @@ export default function Register() {
         email: formData.email,
         password: formData.password,
         branch: role === "student" ? formData.branch : undefined,
-        employeeId: role === "teacher" ? formData.employeeId : undefined,
+        employee_id: role === "teacher" ? formData.employee_id : undefined,
         phone: role === "teacher" ? formData.phone : undefined,
       };
 
@@ -203,8 +203,8 @@ export default function Register() {
                       <div className="relative">
                         <input 
                           type="text"
-                          name="employeeId"
-                          value={formData.employeeId}
+                          name="employee_id"
+                          value={formData.employee_id}
                           onChange={handleChange} 
                           placeholder="EMP-12345" 
                           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all pl-10"

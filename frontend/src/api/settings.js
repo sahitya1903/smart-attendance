@@ -1,39 +1,24 @@
-const API_BASE = import.meta.env.VITE_API_URL;
+import api from "./axiosClient";
 
-export async function getSettings(){
-    const res = await fetch(`${API_BASE}/api/settings`, {
-        method: "GET",
-        credentials: "include",
-    });
+export const getSettings = async () => {
+  const res = await api.get("/settings");
+  return res.data;
+};
 
-    if(!res.ok) throw new Error("Failed to load settings");
-    return res.json()
-}
+export const patchSettings = async (payload) => {
+  const res = await api.patch("/settings", payload);
+  return res.data;
+};
 
+export const uploadAvatar = async (file) => {
+  const form = new FormData();
+  form.append("file", file);
 
+  const res = await api.post("/settings/upload-avatar", form, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
-export async function patchSettings(payload){
-    const res = await fetch(`${API_BASE}/api/settings`, {
-        method: "PATCH",
-        headers: {"Content-Type": "application/json"},
-        credentials: "include",
-        body: JSON.stringify(payload),
-    });
-
-    if(!res.ok) throw new Error("Failed to save settings");
-    return res.json();
-}
-
-export async function uploadAvatar(file) {
-    const form = new FormData();
-    form.append("file", file);
-
-    const res = await fetch(`${API_BASE}/api/settings/upload-avatar`, {
-        method: "POST",
-        credentials: "include",
-        body: form,
-    });
-
-    if(!res.ok) throw new Error("Failed to upload avatar");
-    return res.json();
-}
+  return res.data;
+};
