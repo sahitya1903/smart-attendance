@@ -172,8 +172,8 @@ async def get_subject_students(
     
     # students collection
     students_map = {
-        str(s["user_id"]): s
-        async for s in db.students.find({"user_id": {"$in": student_user_ids}})
+        str(s["userId"]): s
+        async for s in db.students.find({"userId": {"$in": student_user_ids}})
     }
     
     # user's collections
@@ -198,9 +198,13 @@ async def get_subject_students(
             "roll": user.get("roll"),      # ✅ now exists
             "year": user.get("year"),      # ✅ now exists
             "branch": user.get("branch"),
+            "embeddings": student_doc.get("face_embeddings") if student_doc else [],
             "avatar": student_doc.get("image_url") if student_doc else None,
-            "verified": s["verified"],
-            "attendance": s["attendance"],
+            "verified": s.get("verified", False),
+            "attendance": s.get("attendance", {
+                "present": 0,
+                "absent": 0
+            }),
         })
     
     return response

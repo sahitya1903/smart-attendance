@@ -9,6 +9,9 @@ from ...core.security import get_current_user
 from app.services.students import get_student_profile
 
 from cloudinary.uploader import upload
+import base64
+from app.utils.face_encode import get_face_embedding
+
 
 router = APIRouter(prefix="/students", tags=["students"])
 
@@ -58,9 +61,21 @@ async def upload_image_url(
         raise HTTPException(status_code=400, detail="Only JPG/PNG allowed")
 
     student_user_id = ObjectId(current_user["id"])
-
+    
+    # 1. Read image bytes
+    image_bytes = await file.read()
+    
+    # 2. Generate face embeddings
+    try:
+        embedding = get_face_embedding(image_bytes)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    # print("image details ",image_bytes, embedding)
+    
+    
     upload_result = upload(
-        file.file,
+        image_bytes,
         folder = "student_faces",
         public_id = str(current_user["id"]),
         overwite=True,
@@ -69,13 +84,22 @@ async def upload_image_url(
 
     image_url = upload_result.get("secure_url")
 
+    # 3. Store image_url + embeddings
     await db.students.update_one(
         {"userId": student_user_id},
-        {"$set": {"image_url": image_url}}
+        {
+            "$set": {
+                "image_url": image_url,
+                "verified": True
+            },
+            "$push": {
+                "face_embeddings": embedding
+            }
+        }
     )
 
     return {
-        "message": "Photo uploaded successfully",
+        "message": "Photo uploaded and face registered successfully",
         "image_url": image_url
     }
 
@@ -125,7 +149,7 @@ async def add_subject(
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    user = await db.users.find_one({"_id": student["user_id"]})
+    user = await db.users.find_one({"_id": student["userId"]})
     student_name = user.get("name", "")
     
     print(student_name)
