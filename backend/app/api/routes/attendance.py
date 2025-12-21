@@ -12,8 +12,8 @@ from app.utils.match_utils import match_embedding
 router = APIRouter(prefix="/api/attendance", tags=["Attendance"])
 
 # distance thresholds
-CONFIDENT_TH = 0.60
-UNCERTAIN_TH = 0.75
+CONFIDENT_TH = 0.50
+UNCERTAIN_TH = 0.60
 
 
 @router.post("/mark")
@@ -94,11 +94,14 @@ async def mark_attendance(payload: Dict):
         )
 
         # decide status
-        if best_match and best_distance < UNCERTAIN_TH:
-            status = "present"
+        if best_distance < 0.50:
+            status = "present"          # strong match
+        elif best_distance < 0.60:
+            status = "uncertain"        # needs manual confirmation
         else:
             status = "unknown"
             best_match = None
+
             
         user = None
         if best_match:

@@ -75,24 +75,6 @@ export default function MarkAttendance() {
     submitImage(imageSrc);
   }, [webcamRef]);
 
-  // const submitImage = async (imageSrc) => {
-  //   setStatus("Processing...");
-  //   try {
-  //     // Mocking the backend call logic from your previous code
-  //     const res = await fetch("/api/attendance/mark", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ image: imageSrc })
-  //     });
-  //     const json = await res.json();
-  //     setStatus("Done: " + (json.detected?.length || 0) + " detected");
-  //   } catch (err) {
-  //     // For demo purposes, we settle to 'Idle' or 'Error'
-  //     setStatus("Idle"); 
-  //     console.log("Mock submission (backend likely not running)");
-  //   }
-  // };
-
   useEffect(() => {
     if (!selectedSubject || !webcamRef.current) return;
 
@@ -157,7 +139,7 @@ export default function MarkAttendance() {
         updated[id].count += 1;
 
         // mark present after 3 confirmations
-        if (updated[id].count >= 1) {
+        if (updated[id].count >= 3) {
           updated[id].status = "present";
         }
       });
